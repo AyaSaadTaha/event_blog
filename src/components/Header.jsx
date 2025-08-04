@@ -8,6 +8,7 @@ import './Header.css'
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import Navbar from "./Navbar.jsx";
 import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 
 
 export default function Header() {
@@ -59,7 +60,6 @@ export default function Header() {
                     <Navbar />
 
                 </Box>
-
                 {currentUser ? (
                     <>
                         <Link to="/profile">Profile</Link>
@@ -76,8 +76,13 @@ export default function Header() {
                                 <Link to="/adminpanel">Posts</Link>
                             </>
                         )}
-                        <button onClick={handleLogout}>Logout</button>
+                        <Box>
+                            <IconButton onClick={handleLogout} color="inherit" title="Login">
+                                <MdLogout />
+                            </IconButton>
+                        </Box>
                     </>
+
                 ) : (
                     <>
                         <Box>

@@ -4,6 +4,16 @@ import { useAuth } from "../context/AuthContext";
 import {doc, setDoc, deleteDoc, getDoc, collection,query,onSnapshot} from "firebase/firestore";
 import { db } from "../firebase/config";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+    Card,
+    CardContent,
+    Typography,
+    Chip,
+    IconButton,
+    Divider,
+    Box,
+    Stack,
+} from "@mui/material";
 
 export default function PostCard({ post }) {
     const { currentUser } = useAuth();
@@ -57,37 +67,52 @@ export default function PostCard({ post }) {
     };
 
     return (
-        <div className="post-card">
-            <div className="post-image-container">
-                {currentUser && (
-                    <button
-                        className={`favorite-button ${isFavorite ? "active" : ""}`}
-                        onClick={toggleFavorite}
-                        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-                    >
-                        {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                    </button>
-                )}
-            </div>
+        <Card sx={{ marginBottom: 3 }}>
+            <CardContent>
+                {/* Oben: Datum + Favoriten */}
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant="body2" color="text.secondary">
+                        {new Date(post.createdAt?.toDate()).toLocaleDateString()}
+                    </Typography>
 
-            <div className="post-content">
-                <Link to={`/PostDetails/${post.id}`}>
-                    <h3>{post.title}</h3>
+                        {currentUser && (
+                            <IconButton
+                                className={`favorite-button ${isFavorite ? "active" : ""}`}
+                                onClick={toggleFavorite}
+                                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                            >
+                                {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                            </IconButton>
+                        )}
+
+                </Stack>
+
+                {/* title */}
+                <Typography variant="h5" component="div" sx={{ marginTop: 1 }}>
+                    <Link to={`/PostDetails/${post.id}`}>
+                        <h3>{post.title}</h3>
+                    </Link>
+                </Typography>
+
+                {/* description */}
+                <Typography variant="body1" sx={{ marginTop: 1 }}>
                     <p className="post-excerpt">{post.content.substring(0, 100)}...</p>
-                </Link>
+                </Typography>
 
-                <div className="post-meta">
-                    <span className="post-date">
-                      {new Date(post.createdAt?.toDate()).toLocaleDateString()}
-                    </span>
-                    <span className="post-author">
-                        {post.author || "Unknown author"}
-                    </span>
-                    <div className="favorite-count">
-                        <FaHeart /> {favoriteCount}
-                    </div>
-                </div>
-            </div>
-        </div>
+                {/* categories */}
+                <Box sx={{ marginTop: 2 }}>
+                    <Chip label={post.category} color="primary" />
+                </Box>
+
+                <Divider sx={{ marginY: 2 }} />
+                <Typography variant="body1" sx={{ marginTop: 1 }}>
+                    {post.author || "Unknown author"}
+                </Typography>
+                <Typography variant="body1" sx={{ marginTop: 1 }}>
+                    <FaHeart /> {favoriteCount}
+                </Typography>
+
+            </CardContent>
+        </Card>
     );
 }
