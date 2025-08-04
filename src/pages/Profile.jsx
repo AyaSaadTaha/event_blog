@@ -1,5 +1,5 @@
 import { useAuth } from '../context/AuthContext';
-import {db } from '../firebase/config';
+import { db } from '../firebase/config';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { FaUser, FaEnvelope, FaPhone, FaUserShield, FaCalendarAlt, FaSignOutAlt } from 'react-icons/fa';
@@ -9,16 +9,26 @@ export default function Profile() {
     const { currentUser } = useAuth();
     const [favoritePosts, setFavoritePosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        const fetchFavorites = async () => {
+        const fetchUserData = async () => {
             if (currentUser) {
                 try {
-                    // 1. Get user's favorite references
+                    // 1. Get user's document from Firestore
+                    const userDocRef = doc(db, "users", currentUser.uid);
+                    const userDocSnap = await getDoc(userDocRef);
+
+                    if (userDocSnap.exists()) {
+                        setUserData(userDocSnap.data());
+                    } else {
+                        console.log("No user data found");
+                    }
+
+                    // 2. Get user's favorite posts
                     const favoritesRef = collection(db, "users", currentUser.uid, "userFavorites");
                     const favoritesSnapshot = await getDocs(favoritesRef);
 
-                    // 2. Fetch complete post data for each favorite
                     const postsPromises = favoritesSnapshot.docs.map(async (favDoc) => {
                         const postRef = doc(db, "posts", favDoc.id);
                         const postSnap = await getDoc(postRef);
@@ -33,13 +43,13 @@ export default function Profile() {
                     const posts = await Promise.all(postsPromises);
                     setFavoritePosts(posts);
                 } catch (error) {
-                    console.error("Error fetching favorites:", error);
+                    console.error("Error fetching data:", error);
                 } finally {
                     setLoading(false);
                 }
             }
         };
-        fetchFavorites();
+        fetchUserData();
     }, [currentUser]);
 
     return (
@@ -48,8 +58,7 @@ export default function Profile() {
                 <div className="profile-avatar">
                     <FaUser size={80} />
                 </div>
-                <h1>{currentUser?.name || 'User Profile'}</h1>
-
+                <h1>{userData?.name || currentUser?.displayName || 'User Profile'}</h1>
             </div>
 
             <div className="profile-details">
@@ -65,7 +74,7 @@ export default function Profile() {
                     <FaPhone className="detail-icon" />
                     <div>
                         <h3>Phone</h3>
-                        <p>{currentUser?.phone || 'Not provided'}</p>
+                        <p>{userData?.phone || 'Not provided'}</p>
                     </div>
                 </div>
 
@@ -73,7 +82,7 @@ export default function Profile() {
                     <FaUserShield className="detail-icon" />
                     <div>
                         <h3>Role</h3>
-                        <p>{currentUser?.role || 'user'}</p>
+                        <p>{userData?.role || 'user'}</p>
                     </div>
                 </div>
 
@@ -82,11 +91,14 @@ export default function Profile() {
                     <div>
                         <h3>Member Since</h3>
                         <p>
-                            {currentUser?.createdAt?.toDate().toLocaleDateString() || 'Unknown'}
+                            {currentUser?.metadata?.creationTime
+                                ? new Date(currentUser.metadata.creationTime).toLocaleDateString()
+                                : 'Unknown'}
                         </p>
                     </div>
                 </div>
             </div>
+
             <div className="favorites-section">
                 <h2>Your Favorite Posts ({favoritePosts.length})</h2>
                 {loading ? (
@@ -99,7 +111,8 @@ export default function Profile() {
                                 post={{
                                     id: post.id,
                                     title: post.title,
-                                    content: post.content || "", // Ensure content exists
+                                    content: post.content || "",
+                                    kategorienId: post.kategorienId || "",
                                     createdAt: post.createdAt,
                                     author: post.author
                                 }}
