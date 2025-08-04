@@ -103,7 +103,7 @@ export default function PostCard({ post }) {
                 <div className="event-content">
                 <CardContent>
                     <Box sx={{ marginBottom: 3 }}>
-                        <Chip label={getKategorieNameById(post.kategorienId)} color="primary" />
+                        <Chip sx={{backgroundColor:'#c01615', width: 100}} label={getKategorieNameById(post.kategorienId)} color="primary" />
                     </Box>
                     <Typography sx={{ marginBottom: 3 }} variant="h6" className="event-title">
                         <Link to={`/PostDetails/${post.id}`}>
@@ -127,57 +127,5 @@ export default function PostCard({ post }) {
             </div>
         </div>
     </Card>
-
-    /*<Card className="postcard-card" sx={{ marginBottom: 3 }}>
-            <div className="postcard-image-container">
-                <img
-                    src={post.image || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dg"}
-                    alt="img"
-                    className="postcard-image"
-                />
-            </div>
-            <CardContent className="postcard-content">
-                {/!* Oben: Datum + Favoriten *!/}
-                <Stack className="postcard-top" direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography className="postcard-date" variant="body2" color="text.secondary">
-                        {new Date(post.createdAt?.toDate()).toLocaleDateString()}
-                    </Typography>
-
-                        {currentUser && (
-                            <IconButton
-                                className={`favorite-button ${isFavorite ? "active" : ""}`}
-                                onClick={toggleFavorite}
-                                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-                            >
-                                {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                            </IconButton>
-                        )}
-
-                </Stack>
-
-                {/!* title *!/}
-                <Typography variant="h5" component="div" sx={{ marginTop: 1 }}>
-                    <Link className="postcard-title" to={`/PostDetails/${post.id}`}>
-                        <h3>{post.title}</h3>
-                    </Link>
-                </Typography>
-
-                {/!* description *!/}
-                <Typography variant="body1" sx={{ marginTop: 1 }}>
-                    <p className="postcard-description">{post.content.substring(0, 100)}...</p>
-                </Typography>
-
-                {/!* categories *!/}
-                <Box sx={{ marginTop: 2 }}>
-                    <Chip label={getKategorieNameById(post.kategorienId)} color="primary" />
-                </Box>
-
-                <Divider className="postcard-divider" sx={{ marginY: 2 }} />
-                <span className="postcard-author">
-                    {post.author || "Unknown author"} • <FaHeart /> {favoriteCount}
-                </span>
-
-            </CardContent>
-        </Card>*/
     );
 }

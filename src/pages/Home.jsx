@@ -3,6 +3,8 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase/config";
 import PostCard from "../components/PostCard";
 import '../components/PostCard.css'
+import { FaSortAmountDown } from "react-icons/fa";
+import { FaSortAmountUp } from "react-icons/fa";
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
@@ -31,7 +33,14 @@ export default function Home() {
 
     return (
         <div className="events-page-container">
+            <div className="events-page-sort">
             <h1 className="events-page-title">Upcoming Events</h1>
+                <div>
+                    <div className="icon-button"><FaSortAmountDown /></div>
+                    <div className="icon-button"><FaSortAmountUp /></div>
+                </div>
+            </div>
+
             <div className="events-list">
                 {posts.map((post) => (
                     <PostCard key={post.id} post={post} />

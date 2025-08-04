@@ -1,6 +1,5 @@
 import React from "react";
 import "./Header.css";
-import Header from "./Header.jsx";
 
 const HeroSection = () => {
     return (

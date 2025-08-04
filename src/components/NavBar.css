@@ -45,15 +45,14 @@
 }
 
 .category-button {
-    background-color: rgba(255, 255, 255, 0.15) !important;
+    background-color: #0d0d0d !important;
     color: white !important;
-    font-weight: 500;
-    padding: 0.5rem 1.2rem;
-    border-radius: 25px;
-    transition: 0.3s;
+    text-transform: none !important;
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    padding: 14px 16px !important;
 }
 
 .category-button:hover {
-    background-color: rgba(255, 255, 255, 0.3) !important;
+    background-color: #222 !important;
 }
-
