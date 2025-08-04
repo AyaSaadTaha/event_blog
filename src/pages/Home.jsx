@@ -30,9 +30,9 @@ export default function Home() {
     if (loading) return <div className="loading-spinner">Loading...</div>;
 
     return (
-        <div className="container">
-            <h1 className="page-title">Latest Posts</h1>
-            <div className="posts-container">
+        <div className="events-page-container">
+            <h1 className="events-page-title">Upcoming Events</h1>
+            <div className="events-list">
                 {posts.map((post) => (
                     <PostCard key={post.id} post={post} />
                 ))}

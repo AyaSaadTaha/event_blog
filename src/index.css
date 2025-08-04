@@ -39,7 +39,8 @@ body {
 }
 */
 
-/* PostDetails Cards */
+/*
+!* PostDetails Cards *!
 .post-card {
   background: white;
   border: 1px solid #ddd;
@@ -67,7 +68,7 @@ body {
   color: var(--primary);
 }
 
-/* Comment Section */
+!* Comment Section *!
 .comment-section {
   margin-top: 2rem;
   background: white;
@@ -94,7 +95,7 @@ body {
   color: var(--primary);
 }
 
-/* Forms */
+!* Forms *!
 .auth-form, .admin-page {
   max-width: 500px;
   margin: 2rem auto;
@@ -168,7 +169,7 @@ button:disabled {
   font-weight: bold;
 }
 
-/* Profile Page */
+!* Profile Page *!
 .profile-page {
   max-width: 600px;
   margin: 2rem auto;
@@ -183,7 +184,7 @@ button:disabled {
   margin-bottom: 1.5rem;
 }
 
-/* Admin Panel */
+!* Admin Panel *!
 .admin-panel {
   max-width: 800px;
   margin: 2rem auto;
@@ -211,7 +212,7 @@ button:disabled {
   background-color: #d1144a;
 }
 
-/* PostDetails Page */
+!* PostDetails Page *!
 .post-page {
   max-width: 800px;
   margin: 2rem auto;
@@ -229,17 +230,10 @@ button:disabled {
   margin: 20px 0;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-
-  .posts-container {
-    grid-template-columns: 1fr;
-  }
-}
+!* Responsive *!
 
 
-
-/* Post Card Enhancements */
+!* Post Card Enhancements *!
 .post-card {
   background: white;
   border-radius: 12px;
@@ -321,7 +315,7 @@ button:disabled {
   color: var(--primary);
 }
 
-/* Posts Grid Enhancements */
+!* Posts Grid Enhancements *!
 .posts-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -402,7 +396,7 @@ button:disabled {
   color: #ff4757;
 }
 
-/*für profile*/
+!*für profile*!
 .profile-container {
   max-width: 1200px;
   margin: 2rem auto;
@@ -519,4 +513,4 @@ button:disabled {
     position: static;
     margin: 1rem auto;
   }
-}
+}*/
