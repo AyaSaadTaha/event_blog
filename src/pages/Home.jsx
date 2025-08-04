@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase/config";
 import PostCard from "../components/PostCard";
+import '../components/PostCard.css'
 
 export default function Home() {
     const [posts, setPosts] = useState([]);

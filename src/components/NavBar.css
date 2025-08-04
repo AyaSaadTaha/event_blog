@@ -37,3 +37,23 @@
 .dropdown-item:hover {
     background-color: #f1f1f1;
 }
+
+.category-dropdown {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.category-button {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+.category-button:hover {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+}
+

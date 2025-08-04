@@ -22,6 +22,7 @@ const Navbar = () => {
                 onClick={handleOpen}
                 color="inherit"
                 endIcon={<FaChevronDown />}
+                className="category-button"
             >
                 Kategorien
             </Button>

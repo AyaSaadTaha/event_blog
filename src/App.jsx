@@ -9,12 +9,14 @@ import CreatPost from './pages/CreatPost.jsx';
 import Profile from './pages/Profile';
 import AdminPanel from "./components/AdminPanel.jsx";
 import Users from "./pages/Users.jsx";
+import HeroSection from "./components/HeroSection.jsx";
 
 function App() {
     return (
         <Router>
             <AuthProvider>
                 <Header />
+                <HeroSection/>
                 <main className="container">
                     <Routes>
                         <Route path="/" element={<Home />} />
