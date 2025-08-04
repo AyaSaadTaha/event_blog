@@ -24,3 +24,133 @@
 .auth a:hover {
     color: #0056b3;
 }
+
+/* Header UI*/
+
+.header-appbar {
+    background-color: transparent !important;
+}
+
+.header-toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+}
+
+.header-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #222;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.header-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.header-link {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+}
+
+.header-link:hover {
+    color: #000;
+}
+
+.header-user-actions,
+.header-auth-icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/*Header UI*/
+
+.header-appbar {
+    background-color: transparent !important;
+}
+
+.header-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.header-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #222;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.header-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    min-width: 100px;
+}
+
+.header-link {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+    min-width: 100px!important;
+}
+
+.header-link:hover {
+    color: #000;
+}
+
+.header-user-actions,
+.header-auth-icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* HeroSection sections*/
+
+.hero-container {
+    position: relative;
+    height: 70vh;
+    background-image: url('https://www.eventbutler.ch/fileadmin/bilder/header/home/hero-slider/header_location_4.jpg'); /* image for header and hero */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'DM Serif Display', serif;
+}
+
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 800px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.hero-navbar {
+    margin-top: 1rem;
+}
+
