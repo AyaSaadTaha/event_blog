@@ -1,9 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase/config.js";
 import { useAuth } from '../context/AuthContext';
+import Navbar from "../components/Navbar.jsx";
+import {Button, Menu, MenuItem} from "@mui/material";
+import {FaChevronDown} from "react-icons/fa";
+import { getAllKategorien } from '../components/kategorienEnum.js';
+
 
 export default function CreatePost() {
+    // für kategorien dropdownlist
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedKategorie, setSelectedKategorie] = useState("");
+    const handleKategorienOpen = (event) => setAnchorEl(event.currentTarget);
+    const handleKategorienClose = () => setAnchorEl(null);
+
+    const handleKategorieSelect = (kat) => {
+        setForm({...form, KategorienID: kat.id});
+        setSelectedKategorie(kat.name);
+        handleKategorienClose();
+    };
+    // end für kategorien dropdownlist
+
     const { currentUser } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -11,7 +29,8 @@ export default function CreatePost() {
 
     const [form, setForm] = useState({
         title: '',
-        content: ''
+        content: '',
+        KategorienID: ''
     });
 
     const handleChange = (e) => {
@@ -24,8 +43,8 @@ export default function CreatePost() {
         setSuccess("");
         setIsLoading(true);
 
-        if (!form.title.trim() || !form.content.trim()) {
-            setError("Title and content are required");
+        if (!form.title.trim() || !form.content.trim() || !form.KategorienID) {
+            setError("Title, content, and category are required");
             setIsLoading(false);
             return;
         }
@@ -34,12 +53,14 @@ export default function CreatePost() {
             await addDoc(collection(db, "posts"), {
                 title: form.title,
                 content: form.content,
+                kategorienId: form.KategorienID,
                 createdAt: new Date(),
-                uid: currentUser?.uid, // Store user ID with the post
-                author: currentUser?.email, // Optional: Store author email
+                uid: currentUser?.uid,
+                author: currentUser?.email,
             });
             setSuccess("Post created successfully!");
-            setForm({ title: "", content: "" }); // Reset form
+            setForm({ title: "", content: "", KategorienID: "" });
+            setSelectedKategorie("");
         } catch (err) {
             console.error("Error creating post:", err);
             setError(err.message || "Failed to create post. Please try again.");
@@ -50,6 +71,7 @@ export default function CreatePost() {
 
     return (
         <div className="admin-page">
+            <Navbar /> {/* Don't forget to include the Navbar */}
             <h1>Create New Post</h1>
             {error && <div className="error-message">{error}</div>}
             {success && <div className="success-message">{success}</div>}
@@ -62,7 +84,7 @@ export default function CreatePost() {
                         type="text"
                         placeholder="Enter post title"
                         name="title"
-                        value={form.title} // Controlled input
+                        value={form.title}
                         onChange={handleChange}
                         required
                     />
@@ -74,14 +96,44 @@ export default function CreatePost() {
                         id="content"
                         placeholder="Write your post content here..."
                         name="content"
-                        value={form.content} // Controlled input
+                        value={form.content}
                         onChange={handleChange}
                         required
                     />
                 </div>
 
+                <div className="form-group">
+                    <Button
+                        aria-controls={anchorEl ? "kategorien-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={anchorEl ? "true" : undefined}
+                        onClick={handleKategorienOpen}
+                        color="inherit"
+                        endIcon={<FaChevronDown />}
+                    >
+                        {selectedKategorie || "Select Category"}
+                    </Button>
+
+                    <Menu
+                        id="kategorien-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleKategorienClose}
+                    >
+                        {getAllKategorien().map((kat) => (
+                            <MenuItem
+                                key={kat.id}
+                                onClick={() => handleKategorieSelect(kat)}
+                            >
+                                {kat.name}
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                </div>
+                <br/><br/>
+
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? "Publishing..." : "Publish Post"}
+                    {isLoading ? "Adding..." : "Add Post"}
                 </button>
             </form>
         </div>

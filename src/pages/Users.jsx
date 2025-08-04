@@ -3,7 +3,6 @@ import { collection, getDocs, doc, deleteDoc, updateDoc, getDoc } from 'firebase
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from 'firebase/auth';
 import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
 
@@ -106,47 +105,6 @@ export default function BenutzerVerwaltung() {
         XLSX.writeFile(workbook, "benutzer.xlsx");
     };
 
-    const exportiereZuPDF = () => {
-        const docPDF = new jsPDF();
-
-        // Titel hinzufügen
-        docPDF.text("Benutzerliste", 14, 15);
-
-        // Tabellenkopf
-        const spalten = ["Name", "E-Mail", "Telefon", "Rolle"];
-
-        // Tabellendaten
-        const zeilen = gefilterteBenutzer.map(u => [
-            u.name || '-',
-            u.email || '-',
-            u.phone || '-',
-            u.role || '-'
-        ]);
-
-        // Tabelle erstellen
-        docPDF.autoTable({
-            head: [spalten],
-            body: zeilen,
-            startY: 20,
-            styles: {
-                cellPadding: 5,
-                fontSize: 10,
-                valign: 'middle',
-                halign: 'left'
-            },
-            headStyles: {
-                fillColor: [41, 128, 185],
-                textColor: 255,
-                fontStyle: 'bold'
-            },
-            alternateRowStyles: {
-                fillColor: [245, 245, 245]
-            }
-        });
-
-        docPDF.save("benutzer.pdf");
-    };
-
     const rollenZaehlung = {
         user: benutzer.filter(u => u.role === "user").length,
         moderator: benutzer.filter(u => u.role === "moderator").length,
@@ -204,28 +162,10 @@ export default function BenutzerVerwaltung() {
                 >
                     📊 Excel Export
                 </button>
-               {/* <button
-                    onClick={exportiereZuPDF}
-                    style={{
-                        padding: '8px 15px',
-                        backgroundColor: '#e74c3c',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                >
-                    📄 PDF Export
-                </button>*/}
             </div>
 
             {/* Statistik */}
-            <div style={{
-                marginBottom: '20px',
-                padding: '15px',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '5px'
-            }}>
+            <div style={{marginBottom: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '5px'}}>
                 <h3>Statistik</h3>
                 <div style={{ display: 'flex', gap: '20px' }}>
                     <div>👤 Benutzer: {rollenZaehlung.user}</div>
@@ -236,11 +176,7 @@ export default function BenutzerVerwaltung() {
 
             {/* Benutzertabelle */}
             <div style={{ overflowX: 'auto' }}>
-                <table style={{
-                    width: '100%',
-                    borderCollapse: 'collapse',
-                    marginBottom: '20px'
-                }}>
+                <table style={{width: '100%', borderCollapse: 'collapse', marginBottom: '20px'}}>
                     <thead>
                     <tr style={{ backgroundColor: '#3498db', color: 'white' }}>
                         <th style={{ padding: '12px', textAlign: 'left' }}>Name</th>
@@ -255,9 +191,7 @@ export default function BenutzerVerwaltung() {
                         <tr key={u.id} style={{ borderBottom: '1px solid #ddd' }}>
                             <td style={{ padding: '12px' }}>
                                 {bearbeiteBenutzerId === u.id ? (
-                                    <input
-                                        name="name"
-                                        value={bearbeitungsFormular.name}
+                                    <input name="name" value={bearbeitungsFormular.name}
                                         onChange={handleBearbeitungsAenderung}
                                         style={{ padding: '5px', width: '100%' }}
                                     />
@@ -266,9 +200,7 @@ export default function BenutzerVerwaltung() {
                             <td style={{ padding: '12px' }}>{u.email}</td>
                             <td style={{ padding: '12px' }}>
                                 {bearbeiteBenutzerId === u.id ? (
-                                    <input
-                                        name="telefon"
-                                        value={bearbeitungsFormular.telefon}
+                                    <input name="telefon" value={bearbeitungsFormular.telefon}
                                         onChange={handleBearbeitungsAenderung}
                                         style={{ padding: '5px', width: '100%' }}
                                     />
