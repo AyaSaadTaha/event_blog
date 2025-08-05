@@ -74,7 +74,7 @@ export default function PostCard({ post }) {
 
             <div className="event-date">
                 <span className="event-month">
-                    {new Date(post.createdAt?.toDate()).toLocaleString('en-US', { month: 'short' }).toUpperCase()}
+                    {new Date(post.createdAt?.toDate()).toLocaleString('de-DE', { month: 'short' }).toUpperCase()}
                 </span>
                 <span className="event-day">
                      {new Date(post.createdAt?.toDate()).getDate()}
@@ -123,7 +123,7 @@ export default function PostCard({ post }) {
                     <div className="event-footer">
                         <Box sx={{ borderTop: '1px solid #ddd', mt: 2, mb: 1 }} />
                         <Link to={`/PostDetails/${post.id}`} className="event-details-link">
-                            View Event Details →
+                            Veranstaltungsdetails anzeigen →
                         </Link>
                         <Box/>
                     </div>

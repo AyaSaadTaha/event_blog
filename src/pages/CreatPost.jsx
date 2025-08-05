@@ -71,8 +71,8 @@ export default function CreatePost() {
 
     return (
         <div className="admin-page">
-            <Navbar /> {/* Don't forget to include the Navbar */}
-            <h1>Create New Post</h1>
+            {/*<Navbar />*/} {/* Don't forget to include the Navbar */}
+            <h1>Post erstellen</h1>
             {error && <div className="error-message">{error}</div>}
             {success && <div className="success-message">{success}</div>}
 

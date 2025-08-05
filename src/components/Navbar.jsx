@@ -37,7 +37,7 @@ const Navbar = () => {
                     <MenuItem
                         key={idx}
                         component={Link}
-                        to={`/?category=${kat}`}
+                        to={idx === 0 ? "/?category=alles" : `/?category=${idx}`}
                         onClick={handleClose}
                     >
                         {kat}

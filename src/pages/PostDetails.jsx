@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
 import CommentSection from "../components/CommentSection";
+import {Box, Chip} from "@mui/material";
+import {getKategorieNameById} from "../components/kategorienEnum.js";
+import {FaRegHeart} from "react-icons/fa";
+import '../components/CommentSection.css'
 
 export default function PostDetails() {
     const { id } = useParams();
@@ -41,24 +45,39 @@ export default function PostDetails() {
 
     return (
         <div className="post-page">
-            <article>
-                <h1>{post.title}</h1>
-                <div className="post-meta">
-                    <span>Posted on: {new Date(post.createdAt?.toDate()).toLocaleDateString()}</span>
-                </div>
-                {post.imageUrl && (
-                    <div className="post-image">
-                        <img src={post.imageUrl} alt={post.title} />
-                    </div>
-                )}
+            <div className="post-container">
+            {/* Event */}
+            <article className="post-article">
                 <div className="post-content">
-                    {post.content.split('\n').map((paragraph, i) => (
-                        <p key={i}>{paragraph}</p>
-                    ))}
+                    <Box sx={{ marginBottom: 1, textAlign: "center" }}>
+                        <Chip sx={{backgroundColor:'#c01615', width: 100}} label={getKategorieNameById(post.kategorienId)} color="primary" />
+                    </Box>
+                    <header className="post-header">
+                        <h3 className="post-title">{post.title}</h3>
+                        <div className="post-date">
+                            Veröffentlicht am: {new Date(post.createdAt?.toDate()).toLocaleDateString('de-DE')}
+                        </div>
+                    </header>
+
+                    <div className="post-body-container">
+                    <img src={post.image || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070"} alt={post.title} className="post-image" />
+                    <div className="post-body">
+                        {post.content.split('\n').map((paragraph, i) => (
+                            <p key={i}>{paragraph}</p>
+                        ))}
+                    </div>
+                    </div>
+                    {/* Like button */}
+                    <div className="comment-actions">
+                        <button className="like-btn">
+                            <FaRegHeart />
+                            <span>0</span>
+                        </button>
+                    </div>
                 </div>
             </article>
-
             <CommentSection postId={id} comments={comments} />
+            </div>
         </div>
     );
 }
