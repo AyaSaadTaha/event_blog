@@ -3,14 +3,18 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase/config";
 import PostCard from "../components/PostCard";
 import '../components/PostCard.css'
-import {FaSearch, FaSortAmountDown} from "react-icons/fa";
+import { FaSortAmountDown} from "react-icons/fa";
 import { FaSortAmountUp } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOrder, setSortOrder] = useState("desc"); // 'asc' or 'desc'
+
+    const [searchParams] = useSearchParams();
+    const categoryParam = searchParams.get("category") || "alles";
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -32,7 +36,11 @@ export default function Home() {
         fetchPosts();
     }, []);
 
-    const filteredPosts = posts.filter((post) =>
+    const filteredPosts = posts.filter((post) => {
+        if (categoryParam === "alles") return true; // show all event posts
+        return String(post.kategorienId) === String(Number(categoryParam) - 1);
+        //search input
+    }).filter((post) =>
         post.title.toLowerCase().includes(searchTerm.toLowerCase())
         // Sort posts by date
     ).sort((a, b) => {
@@ -82,7 +90,7 @@ export default function Home() {
 
             <div className="events-list">
                 {filteredPosts.map((post) => (
-                    <PostCard key={post.id} post={post} />
+                    <PostCard key={post.id} post={post}/>
                 ))}
             </div>
         </div>
