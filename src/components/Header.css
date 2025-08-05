@@ -3,7 +3,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    background-color: #b1dbf3;
     border-bottom: 1px solid #ccc;
 }
 
@@ -28,13 +27,15 @@
 /* Header UI*/
 
 .header-appbar {
-    background-color: transparent !important;
+    background-color: white!important;
 }
 
 .header-toolbar {
     display: flex;
     justify-content: space-between;
     padding: 1rem 2rem;
+    background-color: white!important;
+    color: black!important;
 }
 
 .header-logo {
@@ -127,7 +128,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-family: 'DM Serif Display', serif;
+    font-family: "Averia Serif Libre", serif;
 }
 
 .hero-overlay {

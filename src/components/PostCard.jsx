@@ -15,6 +15,7 @@ import {
     Stack,
 } from "@mui/material";
 import './PostCard.css'
+import {getKategorieNameById} from "./kategorienEnum.js";
 
 export default function PostCard({ post }) {
     const { currentUser } = useAuth();
@@ -68,56 +69,68 @@ export default function PostCard({ post }) {
     };
 
     return (
-        <Card className="postcard-card" sx={{ marginBottom: 3 }}>
-            <div className="postcard-image-container">
-                <img
-                    src={post.image || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dg"}
-                    alt="img"
-                    className="postcard-image"
-                />
+    <Card className="event-card">
+        <div className="event-container">
+
+            <div className="event-date">
+                <span className="event-month">
+                    {new Date(post.createdAt?.toDate()).toLocaleString('en-US', { month: 'short' }).toUpperCase()}
+                </span>
+                <span className="event-day">
+                     {new Date(post.createdAt?.toDate()).getDate()}
+                </span>
             </div>
-            <CardContent className="postcard-content">
-                {/* Oben: Datum + Favoriten */}
-                <Stack className="postcard-top" direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography className="postcard-date" variant="body2" color="text.secondary">
-                        {new Date(post.createdAt?.toDate()).toLocaleDateString()}
+
+            <div className="event-info">
+                <div className="event-image-wrapper">
+                    <img
+                        src={post.image || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070"}
+                        alt="Event"
+                        className="event-image"
+                    />
+                    {currentUser && (
+                        <IconButton
+                            className={`favorite-icon ${isFavorite ? "active" : ""}`}
+                            onClick={toggleFavorite}
+                            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                        >
+                            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                        </IconButton>
+                    )}
+                </div>
+
+
+                <div className="event-content">
+                <CardContent>
+                    <Box sx={{ marginBottom: 3 }}>
+                        <Chip sx={{backgroundColor:'#c01615', width: 100}} label={getKategorieNameById(post.kategorienId)} color="primary" />
+                    </Box>
+                    <Typography sx={{ marginBottom: 3 }} variant="h6" className="event-title">
+                        <Link to={`/PostDetails/${post.id}`}>
+                            {post.title}
+                        </Link>
                     </Typography>
 
-                        {currentUser && (
-                            <IconButton
-                                className={`favorite-button ${isFavorite ? "active" : ""}`}
-                                onClick={toggleFavorite}
-                                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-                            >
-                                {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                            </IconButton>
-                        )}
+                    <Typography sx={{ marginBottom: 5 }} variant="body2" className="event-description">
+                        {post.content.substring(0, 100)}...
+                    </Typography>
 
-                </Stack>
 
-                {/* title */}
-                <Typography variant="h5" component="div" sx={{ marginTop: 1 }}>
-                    <Link className="postcard-title" to={`/PostDetails/${post.id}`}>
-                        <h3>{post.title}</h3>
-                    </Link>
-                </Typography>
-
-                {/* description */}
-                <Typography variant="body1" sx={{ marginTop: 1 }}>
-                    <p className="postcard-description">{post.content.substring(0, 100)}...</p>
-                </Typography>
-
-                {/* categories */}
-                <Box sx={{ marginTop: 2 }}>
-                    <Chip className="postcard-chip" label={post.category} color="primary" />
-                </Box>
-
-                <Divider className="postcard-divider" sx={{ marginY: 2 }} />
-                <span className="postcard-author">
+                    <span className="postcard-author">
                     {post.author || "Unknown author"} • <FaHeart /> {favoriteCount}
-                </span>
+                    </span>
 
-            </CardContent>
-        </Card>
+                    <div className="event-footer">
+                        <Box sx={{ borderTop: '1px solid #ddd', mt: 2, mb: 1 }} />
+                        <Link to={`/PostDetails/${post.id}`} className="event-details-link">
+                            View Event Details →
+                        </Link>
+                        <Box/>
+                    </div>
+                </CardContent>
+                </div>
+            </div>
+        </div>
+    </Card>
     );
 }

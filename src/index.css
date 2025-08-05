@@ -20,24 +20,20 @@ body {
   line-height: 1.6;
 }
 
-/*
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
-*/
 
 
-/* Posts Grid */
-/*
+ Posts Grid
 .posts-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
   padding: 30px 0;
 }
-*/
 
 /* PostDetails Cards */
 .post-card {
@@ -110,7 +106,7 @@ body {
   margin-bottom: 1.5rem;
 }
 
-input, textarea, button {
+input, textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
@@ -124,18 +120,6 @@ textarea {
   resize: vertical;
 }
 
-button {
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: var(--secondary);
-}
 
 button:disabled {
   background-color: #ccc;
@@ -230,13 +214,6 @@ button:disabled {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-
-  .posts-container {
-    grid-template-columns: 1fr;
-  }
-}
-
 
 
 /* Post Card Enhancements */

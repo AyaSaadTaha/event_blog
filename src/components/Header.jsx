@@ -9,12 +9,20 @@ import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@mui/materia
 import Navbar from "./Navbar.jsx";
 import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
 import {MdLogout} from "react-icons/md";
+import { Menu, MenuItem } from "@mui/material";
+import { FaChevronDown } from "react-icons/fa";
 
 
 export default function Header() {
     const {currentUser} = useAuth();
     const [isAdmin, setIsAdmin] = useState(false);
     const [isModerator, setIsModerator] = useState(false);
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleOpen = (e) => setAnchorEl(e.currentTarget);
+    const handleClose = () => setAnchorEl(null);
 
 
     useEffect(() => {
@@ -66,40 +74,70 @@ export default function Header() {
 
                             {currentUser ? (
                                 <>
-                                    <Box className="header-user-actions">
-                                        <Link to="/profile">Profile</Link>
-                                        {isAdmin && (
-                                            <>
-                                                <Link to="/creatpost">Add Post</Link>
-                                                <Link to="/adminpanel">Posts</Link>
-                                                <Link to="/users">Users</Link>
-                                            </>
-                                        )}
-                                        {isModerator && !isAdmin && (
-                                            <>
-                                                <Link to="/creatpost">Add Post</Link>
-                                                <Link to="/adminpanel">Posts</Link>
-                                            </>
-                                        )}
-                                        <IconButton onClick={handleLogout} color="inherit" title="Login">
-                                            <MdLogout/>
-                                        </IconButton>
-                                    </Box>
-                                </>
+                                    <Button
+                                        aria-controls={open ? "user-menu" : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? "true" : undefined}
+                                        onClick={handleOpen}
+                                        color="inherit"
+                                        endIcon={<FaChevronDown />}
+                                    >
+                                        Menu
+                                    </Button>
 
+                                    <Menu
+                                        id="user-menu"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        keepMounted
+                                    >
+                                        <MenuItem component={Link} to="/profile" onClick={handleClose}>
+                                            Profile
+                                        </MenuItem>
+
+                                        {(isAdmin || isModerator) && (
+                                            <MenuItem component={Link} to="/creatpost" onClick={handleClose}>
+                                                Add Post
+                                            </MenuItem>
+                                        )}
+
+                                        {(isAdmin || isModerator) && (
+                                            <MenuItem component={Link} to="/adminpanel" onClick={handleClose}>
+                                                Posts
+                                            </MenuItem>
+                                        )}
+
+                                        {isAdmin && (
+                                            <MenuItem component={Link} to="/users" onClick={handleClose}>
+                                                Users
+                                            </MenuItem>
+                                        )}
+
+                                        <MenuItem
+                                            onClick={() => {
+                                                handleLogout();
+                                                handleClose();
+                                            }}
+                                        >
+                                            <MdLogout style={{ marginRight: 8 }} />
+                                            Logout
+                                        </MenuItem>
+                                    </Menu>
+                                </>
                             ) : (
                                 <>
                                     <Box className="header-auth-icons">
                                         <IconButton component={Link} to="/login" color="inherit" title="Login">
                                             <FaSignInAlt/>
                                         </IconButton>
-                                        <IconButton component={Link} to="/register" color="inherit"
-                                                    title="Registrieren">
+                                        <IconButton component={Link} to="/register" color="inherit" title="Registrieren">
                                             <FaUserPlus/>
                                         </IconButton>
                                     </Box>
                                 </>
                             )}
+
 
                         </Toolbar>
                     </AppBar>
