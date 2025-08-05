@@ -120,6 +120,7 @@ export default function CreatePost() {
                         open={Boolean(anchorEl)}
                         onClose={handleKategorienClose}
                     >
+                        <option value="">All Categories</option>
                         {getAllKategorien().map((kat) => (
                             <MenuItem
                                 key={kat.id}

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { FaUser, FaEnvelope, FaPhone, FaUserShield, FaCalendarAlt, FaSignOutAlt } from 'react-icons/fa';
 import PostCard from '../components/PostCard';
+import './profile.css';
 
 export default function Profile() {
     const { currentUser } = useAuth();
