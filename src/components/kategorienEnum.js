@@ -7,7 +7,7 @@ export const kategorien = {
 
 export function getAllKategorien() {
     return Object.entries(kategorien).map(([name, id]) => ({
-        id,
+        id: id.toString(),
         name,
     }));
 }

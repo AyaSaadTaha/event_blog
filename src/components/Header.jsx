@@ -96,17 +96,13 @@ export default function Header() {
                                             Profile
                                         </MenuItem>
 
-                                        {(isAdmin || isModerator) && (
-                                            <MenuItem component={Link} to="/creatpost" onClick={handleClose}>
-                                                Add Post
-                                            </MenuItem>
-                                        )}
+                                        <MenuItem component={Link} to="/creatpost" onClick={handleClose}>
+                                            Add Post
+                                        </MenuItem>
 
-                                        {(isAdmin || isModerator) && (
-                                            <MenuItem component={Link} to="/adminpanel" onClick={handleClose}>
-                                                Posts
-                                            </MenuItem>
-                                        )}
+                                        <MenuItem component={Link} to="/adminpanel" onClick={handleClose}>
+                                            Posts
+                                        </MenuItem>
 
                                         {isAdmin && (
                                             <MenuItem component={Link} to="/users" onClick={handleClose}>

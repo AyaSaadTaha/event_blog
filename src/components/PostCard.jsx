@@ -117,7 +117,7 @@ export default function PostCard({ post }) {
 
 
                     <span className="postcard-author">
-                    {post.author || "Unknown author"} • <FaHeart /> {favoriteCount}
+                    {post.authorName || "Unknown author"} • <FaHeart /> {favoriteCount}
                     </span>
 
                     <div className="event-footer">

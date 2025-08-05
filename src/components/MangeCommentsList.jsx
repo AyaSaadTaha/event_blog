@@ -170,7 +170,7 @@ const MangeCommentsList = () => {
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write your comment here..."
+                        placeholder="Kommentar hinzufügen..."
                         rows="4"
                     />
                     <button
@@ -178,7 +178,7 @@ const MangeCommentsList = () => {
                         disabled={!newComment.trim()}
                         className="submit-comment-btn"
                     >
-                        Add Comment
+                        Kommentieren
                     </button>
                 </div>
 

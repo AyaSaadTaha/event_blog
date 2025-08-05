@@ -1,27 +1,67 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import './CommentSection.css'
 
 export default function CommentSection({ postId, comments }) {
     const [comment, setComment] = useState("");
     const { currentUser } = useAuth();
+    const [user, setUser] = useState(false);
+    const [newComment, setNewComment] = useState('');
+
+    // Fetch data from Firebase users
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!currentUser?.uid) {
+                    throw new Error("User not authenticated");
+                }
+                // 1. Get user
+                const userDocRef = doc(db, "users", currentUser.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (!userDocSnap.exists()) {
+                    throw new Error("User document not found");
+                }
+                setUser(userDocSnap.data())
+                console.log(userDocSnap.data().name)
+            } catch (error) {
+               console.log(error)
+            }
+        }
+        if (currentUser?.uid) {
+            fetchData();
+        }
+        setComment(comments)
+    }, [currentUser]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!comment.trim()) return;
+        if (!newComment.trim()) return;
 
         try {
-            await addDoc(collection(db, "comments"), {
+            const docRef =  await addDoc(collection(db, "comments"), {
                 postId,
                 uid: currentUser?.uid, // Store user ID with the post
                 author: currentUser.email,
-                authorName: currentUser.name,
-                content: comment,
+                authorName: user.name,
+                content: newComment,
                 createdAt: new Date(),
             });
-            window.location.reload(); // Nicht ideal für UX
-            setComment("");
+
+            setComment(prev => [{
+                id: docRef.id,
+                uid:currentUser?.uid,
+                postId: postId,
+                author: currentUser?.email,
+                authorName: user.name,
+                content: newComment,
+                createdAt: new Date().toISOString()
+            }, ...prev]);
+
+            setNewComment('');
+
         } catch (err) {
             console.error("Error adding comment:", err);
         }
@@ -35,12 +75,12 @@ export default function CommentSection({ postId, comments }) {
                 <h3 className="comments-title">Kommentare ({comments.length})</h3>
                 <div className="gradient-line"></div>
 
-                {comments.length > 0 ? (
+                {comment.length > 0 ? (
                     <div>
-                        {comments.map((c) => (
+                        {comment.map((c) => (
                             <div key={c.id} className="comment-item">
                                 <div className="comment-header">
-                                    <strong className="comment-author">{c.author}</strong>
+                                    <strong className="comment-author">{c.authorName}</strong>
                                     <span className="comment-separator">•</span>
                                     <span className="comment-time">gerade eben</span>
                                 </div>
@@ -61,14 +101,14 @@ export default function CommentSection({ postId, comments }) {
             <div className="comment-form">
                 <textarea
                     placeholder="Kommentar hinzufügen..."
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
                     className="comment-textarea"
                     rows="3"
                 />
                 <button
                     onClick={handleSubmit}
-                    disabled={!comment.trim()}
+                    disabled={!newComment.trim()}
                     className="comment-submit"
                 >
                     Kommentieren

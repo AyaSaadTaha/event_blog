@@ -51,7 +51,7 @@ const MangePostsList = () => {
                 const postsQuery = adminView
                     ? query(collection(db, 'posts'), orderBy("createdAt", "desc"))
                     : query(collection(db, 'posts'),
-                        where('author', '==', currentUser.uid),
+                        where('uid', '==', currentUser.uid),
                         orderBy("createdAt", "desc"));
 
                 const postsSnapshot = await getDocs(postsQuery);

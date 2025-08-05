@@ -59,7 +59,7 @@ export default function Profile() {
                 <div className="profile-avatar">
                     <FaUser size={80} />
                 </div>
-                <h1>{userData?.name || currentUser?.displayName || 'User Profile'}</h1>
+                <h1>{userData?.name || 'User Profile'}</h1>
             </div>
 
             <div className="profile-details">
@@ -115,7 +115,8 @@ export default function Profile() {
                                     content: post.content || "",
                                     kategorienId: post.kategorienId || "",
                                     createdAt: post.createdAt,
-                                    author: post.author
+                                    author: post.author,
+                                    authorName: post.authorName
                                 }}
                             />
                         ))}
