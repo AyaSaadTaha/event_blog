@@ -123,6 +123,7 @@
     background-image: url('https://www.eventbutler.ch/fileadmin/bilder/header/home/hero-slider/header_location_4.jpg'); /* image for header and hero */
     background-size: cover;
     background-position: center;
+    background-attachment: fixed; /* for parallax */
     color: white;
     display: flex;
     align-items: center;
