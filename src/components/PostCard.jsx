@@ -115,6 +115,11 @@ export default function PostCard({ post }) {
                         {post.content.substring(0, 100)}...
                     </Typography>
 
+
+                    <span className="postcard-author">
+                    {post.author || "Unknown author"} • <FaHeart /> {favoriteCount}
+                    </span>
+
                     <div className="event-footer">
                         <Box sx={{ borderTop: '1px solid #ddd', mt: 2, mb: 1 }} />
                         <Link to={`/PostDetails/${post.id}`} className="event-details-link">
