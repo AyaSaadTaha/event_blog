@@ -6,6 +6,8 @@ import '../components/PostCard.css'
 import { FaSortAmountDown} from "react-icons/fa";
 import { FaSortAmountUp } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
+import {Pagination} from "@mui/material";
+import {Box} from "@mui/material";
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
@@ -15,6 +17,10 @@ export default function Home() {
 
     const [searchParams] = useSearchParams();
     const categoryParam = searchParams.get("category") || "alles";
+
+    //Pagination
+    const postsPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -48,6 +54,16 @@ export default function Home() {
         const dateB = b.createdAt.toDate();
         return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
     });
+
+    // Pagination
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+    const handlePageChange = (event, page) => {
+        setCurrentPage(page);
+    };
 
     if (loading) return <div className="loading-spinner">Loading...</div>;
 
@@ -89,10 +105,36 @@ export default function Home() {
             </div>
 
             <div className="events-list">
-                {filteredPosts.map((post) => (
+                {currentPosts.map((post) => (
                     <PostCard key={post.id} post={post}/>
                 ))}
             </div>
+            {totalPages > 1 && (
+                <Box display="flex" justifyContent="center" mb={4}>
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={(event, value) => handlePageChange(event, value)}
+                        color="primary"
+                        size="large"
+                        showFirstButton
+                        showLastButton
+                        sx={{
+                            '& .MuiPaginationItem-root': {
+                                backgroundColor: '#f0f0f0',
+                                color: '#333',
+                                '&.Mui-selected': {
+                                    backgroundColor: '#83b2e4',
+                                    color: '#fff',
+                                },
+                                '&:hover': {
+                                    backgroundColor: '#d0d0d0',
+                                }
+                            }
+                        }}
+                    />
+                </Box>
+            )}
         </div>
     );
 }

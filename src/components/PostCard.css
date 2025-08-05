@@ -230,3 +230,7 @@ button.favorite-icon:hover {
     color: white;
 }
 
+.pagination-button {
+    color: #83b2e4!important;
+}
+
