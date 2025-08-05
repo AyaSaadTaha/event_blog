@@ -4,19 +4,19 @@ import './MangePostsList.css';
 import { useAuth } from "../context/AuthContext.jsx";
 import { db } from "../firebase/config";
 import {collection,query, where,getDocs,updateDoc,deleteDoc,doc,orderBy,getDoc} from "firebase/firestore";
-import MangeCommentsList from "./MangeCommentsList.jsx";
 import {getAllKategorien, getKategorieNameById} from "./kategorienEnum.js";
+import {useNavigate} from "react-router-dom";
 
 const MangePostsList = () => {
     // State management
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [showCommentsModal, setShowCommentsModal] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const postsPerPage = 5;
     const [error, setError] = useState(null);
@@ -221,13 +221,33 @@ const MangePostsList = () => {
                                 <td>{formatDate(post.createdAt)}</td>
                                 <td className="actions">
                                     <button
-                                        onClick={() => {
-                                            setSelectedPost({...post});
-                                            setShowCommentsModal(true);
-                                        }}
+                                        onClick={() => navigate(`/posts/${post.uid}/comments`, {
+                                            state: {
+                                                post: {
+                                                    uid: post.uid,
+                                                    title: post.title,
+                                                    content: post.content,
+                                                    kategorienId: post.kategorienId,
+                                                    author: post.author,
+                                                    createdAt: post.createdAt
+                                                    // Nur die benötigten Felder
+                                                },
+                                                currentUser: {
+                                                    uid: currentUser?.uid,
+                                                    email: currentUser?.email,
+                                                    role: currentUser?.role
+                                                    // Nur die benötigten Felder
+                                                },
+                                                user: {
+                                                    name: user?.name,
+                                                    role: user?.role
+                                                    // Weitere benötigte Felder
+                                                }
+                                            }
+                                        })}
                                         className="action-btn view-comments"
                                     >
-                                        Comments
+                                        Manage Comments
                                     </button>
                                     <button
                                         onClick={() => setSelectedPost({...post})}
@@ -273,7 +293,7 @@ const MangePostsList = () => {
             )}
 
             {/* Edit Post Modal */}
-            {selectedPost && !showCommentsModal && (
+            {selectedPost && (
                 <div className="modal-overlay">
                     <div className="modal">
                         <h2>Edit Post</h2>
@@ -317,18 +337,6 @@ const MangePostsList = () => {
                 </div>
             )}
 
-            {/* Comments Modal */}
-            {showCommentsModal && selectedPost && (
-                <MangeCommentsList
-                    post={selectedPost}
-                    currentUser={currentUser}
-                    user={user}
-                    onClose={() => {
-                        setShowCommentsModal(false);
-                        setSelectedPost(null); // Fügen Sie diese Zeile hinzu
-                    }}
-                />
-            )}
         </div>
     );
 };

@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import AdminPanel from "./components/AdminPanel.jsx";
 import Users from "./pages/Users.jsx";
 import HeroSection from "./components/HeroSection.jsx";
+import MangeCommentsList from "./components/MangeCommentsList.jsx";
 
 function App() {
     return (
@@ -27,6 +28,8 @@ function App() {
                         <Route path="/adminpanel" element={<AdminPanel />} />
                         <Route path="/users" element={<Users/>} />
                         <Route path="/profile" element={<Profile />}/>
+                        <Route path="/posts/:postId/comments" element={<MangeCommentsList />} />
+
                     </Routes>
                 </main>
                 <footer>
