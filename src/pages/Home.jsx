@@ -10,6 +10,7 @@ export default function Home() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [sortOrder, setSortOrder] = useState("desc"); // 'asc' or 'desc'
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -20,6 +21,7 @@ export default function Home() {
                     id: doc.id,
                     ...doc.data(),
                 }));
+                console.log("📌 Posts from Firestore:", postsData);
                 setPosts(postsData);
             } catch (error) {
                 console.error("Error fetching posts:", error);
@@ -32,7 +34,12 @@ export default function Home() {
 
     const filteredPosts = posts.filter((post) =>
         post.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        // Sort posts by date
+    ).sort((a, b) => {
+        const dateA = a.createdAt.toDate(); // Timestamp → Date
+        const dateB = b.createdAt.toDate();
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
 
     if (loading) return <div className="loading-spinner">Loading...</div>;
 
@@ -55,9 +62,22 @@ export default function Home() {
                 </div>
 
                 <div>
-                    <div className="icon-button"><FaSortAmountDown /></div>
-                    <div className="icon-button"><FaSortAmountUp /></div>
+                    <div
+                        className={`icon-button ${sortOrder === "asc" ? "active" : ""}`}
+                        onClick={() => setSortOrder("asc")}
+                        title="Sort by oldest first"
+                    >
+                        <FaSortAmountUp />
+                    </div>
+                    <div
+                        className={`icon-button ${sortOrder === "desc" ? "active" : ""}`}
+                        onClick={() => setSortOrder("desc")}
+                        title="Sort by newest first"
+                    >
+                        <FaSortAmountDown />
+                    </div>
                 </div>
+
             </div>
 
             <div className="events-list">

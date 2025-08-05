@@ -225,3 +225,8 @@ button.favorite-icon:hover {
     color: black;
 }
 
+.icon-button.active {
+    background-color: #83b2e4;
+    color: white;
+}
+
