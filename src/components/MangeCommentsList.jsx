@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { format } from 'date-fns';
+import {format, isValid} from 'date-fns';
 import './MangeCommentsList.css';
 import { db } from "../firebase/config";
 import {collection, query, where, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
 
-const MangeCommentsList = ({ post, currentUser, onClose }) => {
+const MangeCommentsList = ({ post, currentUser,user, onClose }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [loading, setLoading] = useState(true);
+    console.log("hi"+user.name);
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -41,6 +42,7 @@ const MangeCommentsList = ({ post, currentUser, onClose }) => {
                 postId: post.uid,
                 uid: currentUser?.uid, // Store user ID with the post
                 author: currentUser.email,
+                authorName: user.name,
                 content: newComment,
                 createdAt: new Date().toISOString()
             });
@@ -49,8 +51,9 @@ const MangeCommentsList = ({ post, currentUser, onClose }) => {
             setComments([...comments, {
                 postId: post.uid,
                 uid: docRef.id,
-                content: newComment,
                 author: currentUser.email,
+                authorName: user.name,
+                content: newComment,
                 createdAt: new Date().toISOString()
             }]);
 
@@ -72,7 +75,14 @@ const MangeCommentsList = ({ post, currentUser, onClose }) => {
     };
 
     const formatDate = (timestamp) => {
-        return format(new Date(timestamp), 'MMM dd, yyyy HH:mm');
+        try {
+            // Handle both Firestore Timestamp objects and ISO strings
+            const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp);
+            return format(isValid(date) ? date : new Date(), 'MMM dd, yyyy HH:mm');
+        } catch (error) {
+            console.warn('Invalid date:', error);
+            return format(new Date(), 'MMM dd, yyyy HH:mm'); // Fallback to current date
+        }
     };
 
     return (
@@ -90,7 +100,7 @@ const MangeCommentsList = ({ post, currentUser, onClose }) => {
                         comments.map(comment => (
                             <div key={comment.uid} className="comment-item">
                                 <div className="comment-header">
-                                    <span className="comment-author">{comment.authorEmail || comment.author}</span>
+                                    <span className="comment-author">{comment.authorName||comment.author}</span>
                                     <span className="comment-date">{formatDate(comment.createdAt)}</span>
                                     {(currentUser.role === 'admin' || currentUser.role === 'moderator' || currentUser.uid === comment.author) && (
                                         <button
@@ -115,10 +125,14 @@ const MangeCommentsList = ({ post, currentUser, onClose }) => {
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Write your comment here..."
                     />
-                    <button onClick={handleAddComment} className="add-comment-btn">
-                        Add Comment
-                    </button>
+                        <button onClick={onClose} className="cancel-btn">
+                            Cancel
+                        </button>
+                        <button onClick={handleAddComment} className="add-comment-btn">
+                            Add Comment
+                        </button>
                 </div>
+
             </div>
         </div>
     );

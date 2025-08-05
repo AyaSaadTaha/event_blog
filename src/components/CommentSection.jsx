@@ -14,8 +14,8 @@ export default function CommentSection({ postId, comments }) {
             await addDoc(collection(db, "comments"), {
                 postId,
                 uid: currentUser?.uid, // Store user ID with the post
-                //author: currentUser?.displayName || "Anonymous", // Fallback if no name
                 author: currentUser.email,
+                authorName: currentUser.name,
                 content: comment,
                 createdAt: new Date(),
             });

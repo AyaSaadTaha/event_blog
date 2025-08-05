@@ -21,7 +21,7 @@ const MangePostsList = () => {
     const postsPerPage = 5;
     const [error, setError] = useState(null);
     const [isAdminView, setIsAdminView] = useState(false); // Added state for admin view
-
+    const [user, setUser] = useState(false); // Added state for admin view
 
     // Fetch data from Firebase
     useEffect(() => {
@@ -45,6 +45,7 @@ const MangePostsList = () => {
                 const userRole = userDocSnap.data().role;
                 const adminView = userRole === 'admin' || userRole === 'moderator';
                 setIsAdminView(adminView);
+                setUser(userDocSnap.data())
 
                 // 2. Fetch posts based on role
                 const postsQuery = adminView
@@ -85,15 +86,18 @@ const MangePostsList = () => {
     }, [currentUser]);
 
     // Filter posts based on search and category
+
+
     const filteredPosts = posts.filter(post => {
         const searchTerm = searchQuery.toLowerCase();
         const matchesSearch =
             post.title?.toLowerCase().includes(searchTerm) ||
             post.content?.toLowerCase().includes(searchTerm);
 
+        // Verbesserte Kategorienfilterung
         const matchesCategory =
             !categoryFilter ||
-            post.kategorienId === categoryFilter; // Korrekter Feldname
+            post.kategorienId?.toString() === categoryFilter.toString();
 
         return matchesSearch && matchesCategory;
     });
@@ -318,7 +322,11 @@ const MangePostsList = () => {
                 <MangeCommentsList
                     post={selectedPost}
                     currentUser={currentUser}
-                    onClose={() => setShowCommentsModal(false)}
+                    user={user}
+                    onClose={() => {
+                        setShowCommentsModal(false);
+                        setSelectedPost(null); // Fügen Sie diese Zeile hinzu
+                    }}
                 />
             )}
         </div>
