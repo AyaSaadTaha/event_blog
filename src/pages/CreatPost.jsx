@@ -6,7 +6,7 @@ import { Button, Menu, MenuItem, TextField, Box, Typography, Paper, CircularProg
 import { FaChevronDown } from "react-icons/fa";
 import { getAllKategorien } from '../components/kategorienEnum.js';
 
-export default function CreatePost() {
+export default function BeitragErstellen() {
 
     const { currentUser } = useAuth();
     // Kategorien Dropdown
@@ -18,10 +18,10 @@ export default function CreatePost() {
     const [success, setSuccess] = useState("");
     const [user, setUser] = useState(null);
     const [form, setForm] = useState({
-        title: '',
-        content: '',
-        KategorienID: '',
-        image: null,
+        title: '',       // DB-Feld bleibt gleich
+        content: '',     // DB-Feld bleibt gleich
+        KategorienID: '', // DB-Feld bleibt gleich
+        image: null,     // DB-Feld bleibt gleich
         imagePreview: null
     });
 
@@ -30,13 +30,13 @@ export default function CreatePost() {
             try {
                 setError(null);
                 if (!currentUser?.uid) {
-                    throw new Error("User not authenticated");
+                    throw new Error("Benutzer nicht angemeldet");
                 }
                 const userDocRef = doc(db, "users", currentUser.uid);
                 const userDocSnap = await getDoc(userDocRef);
 
                 if (!userDocSnap.exists()) {
-                    throw new Error("User document not found");
+                    throw new Error("Benutzerdokument nicht gefunden");
                 }
                 setUser(userDocSnap.data())
             } catch (error) {
@@ -61,18 +61,16 @@ export default function CreatePost() {
         if (!file) return;
 
         if (!file.type.match('image.*')) {
-            setError("Please select an image file");
+            setError("Bitte wählen Sie eine Bilddatei aus");
             return;
         }
 
-        // Check file size before compression
         if (file.size > 500 * 1024) {
-            setError("Image must be smaller than 500KB");
+            setError("Das Bild muss kleiner als 500KB sein");
             return;
         }
 
         try {
-            // Die aggressive Komprimierung wird hier aufgerufen
             const compressedImage = await compressImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -81,16 +79,15 @@ export default function CreatePost() {
                     image: reader.result,
                     imagePreview: reader.result
                 });
-                setError(""); // Clear any previous error
+                setError("");
             };
             reader.readAsDataURL(compressedImage);
         } catch (err) {
-            setError("Failed to process image");
+            setError("Fehler beim Verarbeiten des Bildes");
             console.error(err);
         }
     };
 
-    // Die angepasste Funktion zur aggressiven Bildkomprimierung
     const compressImage = async (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -102,7 +99,6 @@ export default function CreatePost() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    // Setze kleinere maximale Abmessungen für stärkere Komprimierung
                     const MAX_WIDTH = 400;
                     const MAX_HEIGHT = 400;
 
@@ -125,7 +121,6 @@ export default function CreatePost() {
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Reduziere die Qualität für eine kleinere Dateigröße
                     canvas.toBlob((blob) => {
                         if (blob) {
                             resolve(new File([blob], file.name, {
@@ -133,9 +128,9 @@ export default function CreatePost() {
                                 lastModified: Date.now()
                             }));
                         } else {
-                            reject(new Error("Failed to compress image."));
+                            reject(new Error("Fehler beim Komprimieren des Bildes."));
                         }
-                    }, 'image/jpeg', 0.4); // <-- Starke Qualitätsreduzierung
+                    }, 'image/jpeg', 0.4);
                 };
             };
         });
@@ -152,26 +147,26 @@ export default function CreatePost() {
         setIsLoading(true);
 
         if (!form.title.trim() || !form.content.trim() || !form.KategorienID) {
-            setError("Title, content, and category are required");
+            setError("Titel, Inhalt und Kategorie sind erforderlich");
             setIsLoading(false);
             return;
         }
 
         try {
             const postData = {
-                title: form.title,
-                content: form.content,
-                kategorienId: form.KategorienID,
+                title: form.title,          // DB-Feld bleibt gleich
+                content: form.content,      // DB-Feld bleibt gleich
+                kategorienId: form.KategorienID, // DB-Feld bleibt gleich
                 createdAt: new Date(),
                 uid: currentUser?.uid,
                 author: currentUser?.email,
                 authorName: user?.name,
-                imageBase64: form.image || null
+                imageBase64: form.image || null  // DB-Feld bleibt gleich
             };
 
             await addDoc(collection(db, "posts"), postData);
 
-            setSuccess("Post created successfully!");
+            setSuccess("Beitrag erfolgreich erstellt!");
             setForm({
                 title: "",
                 content: "",
@@ -181,8 +176,8 @@ export default function CreatePost() {
             });
             setSelectedKategorie("");
         } catch (err) {
-            console.error("Error creating post:", err);
-            setError(err.message || "Failed to create post. Please try again.");
+            console.error("Fehler beim Erstellen des Beitrags:", err);
+            setError(err.message || "Fehler beim Erstellen des Beitrags. Bitte versuchen Sie es erneut.");
         } finally {
             setIsLoading(false);
         }
@@ -192,7 +187,7 @@ export default function CreatePost() {
         <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
             <Paper elevation={3} sx={{ p: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
-                    Create New Post
+                    Neuen Beitrag erstellen
                 </Typography>
 
                 {error && (
@@ -209,22 +204,22 @@ export default function CreatePost() {
 
                 <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <TextField
-                        label="Title"
+                        label="Titel"
                         variant="outlined"
                         fullWidth
-                        name="title"
+                        name="title"       // DB-Feld bleibt gleich
                         value={form.title}
                         onChange={handleChange}
                         required
                     />
 
                     <TextField
-                        label="Content"
+                        label="Inhalt"
                         variant="outlined"
                         fullWidth
                         multiline
                         rows={1}
-                        name="content"
+                        name="content"     // DB-Feld bleibt gleich
                         value={form.content}
                         onChange={handleChange}
                         required
@@ -240,15 +235,15 @@ export default function CreatePost() {
                         />
                         <label htmlFor="raised-button-file">
                             <Button variant="outlined" component="span" sx={{ mb: 2 }}>
-                                Upload Image
+                                Bild hochladen
                             </Button>
                         </label>
                         {form.imagePreview && (
                             <Box sx={{ mt: 2 }}>
-                                <Typography variant="subtitle2">Image Preview:</Typography>
+                                <Typography variant="subtitle2">Bildvorschau:</Typography>
                                 <img
                                     src={form.imagePreview}
-                                    alt="Preview"
+                                    alt="Vorschau"
                                     style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '8px' }}
                                 />
                             </Box>
@@ -262,7 +257,7 @@ export default function CreatePost() {
                             endIcon={<FaChevronDown />}
                             sx={{ minWidth: 200, justifyContent: 'space-between' }}
                         >
-                            {selectedKategorie || "Select Category"}
+                            {selectedKategorie || "Kategorie auswählen"}
                         </Button>
 
                         <Menu
@@ -290,7 +285,7 @@ export default function CreatePost() {
                         sx={{ mt: 2, py: 1.5 }}
                         startIcon={isLoading ? <CircularProgress size={20} /> : null}
                     >
-                        {isLoading ? "Creating..." : "Create Post"}
+                        {isLoading ? "Wird erstellt..." : "Beitrag erstellen"}
                     </Button>
                 </Box>
             </Paper>

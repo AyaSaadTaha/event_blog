@@ -95,7 +95,7 @@ export default function Header() {
                                 color="inherit"
                                 endIcon={<FaChevronDown />}
                             >
-                                Menu
+                                Menü
                             </Button>
 
                             <Menu
@@ -106,20 +106,20 @@ export default function Header() {
                                 keepMounted
                             >
                                 <MenuItem component={Link} to="/profile" onClick={handleClose}>
-                                    Profile
+                                    Profil
                                 </MenuItem>
 
                                 <MenuItem component={Link} to="/creatpost" onClick={handleClose}>
-                                    Add Post
+                                    Beitrag hinzufügen
                                 </MenuItem>
 
                                 <MenuItem component={Link} to="/adminpanel" onClick={handleClose}>
-                                    Posts
+                                    Beiträge
                                 </MenuItem>
 
                                 {isAdmin && (
                                     <MenuItem component={Link} to="/users" onClick={handleClose}>
-                                        Users
+                                        Nutzer
                                     </MenuItem>
                                 )}
                                 <MenuItem
@@ -129,7 +129,7 @@ export default function Header() {
                                     }}
                                 >
                                     <MdLogout style={{ marginRight: 8 }} />
-                                    Logout
+                                    Abmelden
                                 </MenuItem>
                             </Menu>
                         </>
