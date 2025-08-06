@@ -158,7 +158,7 @@ const MangePostsList = () => {
 
     // Render functions
     if (loading) {
-        return <div className="loading-spinner">Loading...</div>;
+        return <div className="loading-spinner">Wird geladen...</div>;
     }
 
     if (error) {
@@ -166,14 +166,14 @@ const MangePostsList = () => {
     }
 
     if (!currentUser) {
-        return <div className="auth-message">Please log in to view posts</div>;
+        return <div className="auth-message">Bitte melde dich an, um Beiträge anzusehen</div>;
     }
 
     return (
         <div className="posts-container">
             {/* Header */}
             <div className="header">
-                {<h1>{isAdminView ? 'All Posts' : 'My Posts'}</h1>}
+                {<h1>{isAdminView ? 'Alle  Beiträge' : 'Meine Beiträge'}</h1>}
             </div>
 
             {/* Search and Filter */}
@@ -182,7 +182,7 @@ const MangePostsList = () => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search posts..."
+                    placeholder="Beiträge suchen..."
                     className="search-input"
                 />
                 <select
@@ -190,7 +190,7 @@ const MangePostsList = () => {
                     onChange={(e) => setCategoryFilter(e.target.value)}
                     className="category-select"
                 >
-                    <option value="">All Categories</option>
+                    <option value="">Alle Kategorien </option>
                     {categories.map(category => (
                         <option key={category.id} value={category.id}>
                             {category.name}
@@ -204,11 +204,11 @@ const MangePostsList = () => {
                 <table>
                     <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Content Preview</th>
-                        <th>Category</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
+                        <th>Titel</th>
+                        <th>Inhalt</th>
+                        <th>Kategorie</th>
+                        <th>Erstellt am </th>
+                        <th>Aktionen</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -247,26 +247,26 @@ const MangePostsList = () => {
                                         })}
                                         className="action-btn view-comments"
                                     >
-                                        Manage Comments
+                                        Kommentare verwalten
                                     </button>
                                     <button
                                         onClick={() => setSelectedPost({...post})}
                                         className="action-btn edit"
                                     >
-                                        Edit
+                                        Bearbeiten
                                     </button>
                                     <button
                                         onClick={() => handleDeletePost(post.uid)}
                                         className="action-btn delete"
                                     >
-                                        Delete
+                                        Löschen
                                     </button>
                                 </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="no-posts">No posts found</td>
+                            <td colSpan="5" className="no-posts">Keine Beiträge gefunden</td>
                         </tr>
                     )}
                     </tbody>
@@ -280,14 +280,14 @@ const MangePostsList = () => {
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
                     >
-                        Previous
+                        Zurück
                     </button>
                     <span>Page {currentPage} of {totalPages}</span>
                     <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
                     >
-                        Next
+                        Weiter
                     </button>
                 </div>
             )}
@@ -296,9 +296,9 @@ const MangePostsList = () => {
             {selectedPost && (
                 <div className="modal-overlay">
                     <div className="modal">
-                        <h2>Edit Post</h2>
+                        <h2>Beitrag bearbeiten </h2>
                         <div className="form-group">
-                            <label>Title</label>
+                            <label>Titel</label>
                             <input
                                 type="text"
                                 value={selectedPost.title}
@@ -306,14 +306,14 @@ const MangePostsList = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Content</label>
+                            <label>Inhalt</label>
                             <textarea
                                 value={selectedPost.content}
                                 onChange={(e) => setSelectedPost({...selectedPost, content: e.target.value})}
                             />
                         </div>
                         <div className="form-group">
-                            <label>Category</label>
+                            <label>Kategorie</label>
                             <select
                                 value={selectedPost.kategorienId}
                                 onChange={(e) => setSelectedPost({...selectedPost, kategorienId: e.target.value})}
@@ -327,10 +327,10 @@ const MangePostsList = () => {
                         </div>
                         <div className="modal-actions">
                             <button onClick={() => setSelectedPost(null)} className="cancel-btn">
-                                Cancel
+                                Abbrechen
                             </button>
                             <button onClick={handleUpdatePost} className="confirm-btn">
-                                Save Changes
+                                Änderungen speichern
                             </button>
                         </div>
                     </div>
