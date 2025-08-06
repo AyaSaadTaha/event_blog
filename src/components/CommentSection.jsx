@@ -4,7 +4,7 @@ import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import './CommentSection.css'
 
-export default function CommentSection({ postId, comments }) {
+export default function CommentSection({ post, postId, comments }) {
     const [comment, setComment] = useState("");
     const { currentUser } = useAuth();
     const [user, setUser] = useState(false);
@@ -80,9 +80,9 @@ export default function CommentSection({ postId, comments }) {
                         {comment.map((c) => (
                             <div key={c.id} className="comment-item">
                                 <div className="comment-header">
-                                    <strong className="comment-author">{c.authorName}</strong>
+                                    <span className="comment-author">{c.authorName}</span>
                                     <span className="comment-separator">•</span>
-                                    <span className="comment-time">gerade eben</span>
+                                    <span className="comment-time">{new Date(c.createdAt?.toDate()).toLocaleString('de-DE')}</span>
                                 </div>
                                 <p className="comment-text">{c.content}</p>
                             </div>

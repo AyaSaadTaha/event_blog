@@ -152,13 +152,14 @@
 
 .comment-header {
     display: flex;
+    justify-content: start;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
 }
 
 .comment-author {
-    font-weight: 500;
+    font-weight: 700;
     color: #8c67e2!important;
 }
 
@@ -170,6 +171,8 @@
 .comment-time {
     color: #9ca3af;
     font-size: 0.875rem;
+    font-style: italic;
+    padding-top: 3px;
 }
 
 .comment-text {
