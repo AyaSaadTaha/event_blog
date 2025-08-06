@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {doc, setDoc, deleteDoc, getDoc, collection,query,onSnapshot} from "firebase/firestore";
 import { db } from "../firebase/config";
+import {FaHeart, FaRegHeart} from "react-icons/fa";
 import {
     Card,
     CardContent,
