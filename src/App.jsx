@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {Routes, Route, useLocation} from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/./Header.jsx';
 import Home from './pages/Home';
@@ -11,13 +11,14 @@ import AdminPanel from "./components/AdminPanel.jsx";
 import Users from "./pages/Users.jsx";
 import HeroSection from "./components/HeroSection.jsx";
 import MangeCommentsList from "./components/MangeCommentsList.jsx";
+import About from "./components/About.jsx";
 
 function App() {
+    const location = useLocation();
     return (
-        <Router>
             <AuthProvider>
                 <Header />
-                <HeroSection/>
+                {location.pathname === "/" && <HeroSection />}
                 <main className="container">
                     <Routes>
                         <Route path="/" element={<Home />} />
@@ -29,6 +30,7 @@ function App() {
                         <Route path="/users" element={<Users/>} />
                         <Route path="/profile" element={<Profile />}/>
                         <Route path="/posts/:postId/comments" element={<MangeCommentsList />} />
+                        <Route path="/about" element={<About />} />
 
                     </Routes>
                 </main>
@@ -36,7 +38,6 @@ function App() {
                     <p>© {new Date().getFullYear()} EventBlog. All rights reserved.</p>
                 </footer>
             </AuthProvider>
-        </Router>
     );
 }
 
