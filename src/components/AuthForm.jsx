@@ -1,16 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth,db } from "../firebase/config";
-import { doc,setDoc } from "firebase/firestore";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebase/config";
+import { doc, setDoc } from "firebase/firestore";
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import { updateProfile } from "firebase/auth";
-import { Link } from "react-router-dom";
-import './AuthForm.css'
+import './AuthForm.css';
 
-export function AuthForm({mode}) {
+export function AuthForm({ mode, onClose, onSwitchMode }) {
     const [error, setError] = useState("");
-    const navigate = useNavigate();
-
     const [form, setForm] = useState({
         name: '',
         phone: '',
@@ -40,15 +36,14 @@ export function AuthForm({mode}) {
                 });
             }
             await updateProfile(auth.currentUser, {
-                displayName: userCredential.name,
+                displayName: form.name,
             });
-            navigate("/");
+            onClose();
 
         } catch (err) {
             setError(err.message);
         }
     };
-
 
     return (
         <div className="auth-page">
@@ -134,10 +129,13 @@ export function AuthForm({mode}) {
                             {mode === "login"
                                 ? "Sie haben noch kein Konto? "
                                 : "Sie haben bereits ein Konto? "}
-                            <Link to={mode === "login" ? "/register" : "/login"}
-                                  className="auth-link">
+                            <button
+                                type="button"
+                                className="auth-link"
+                                onClick={onSwitchMode}
+                            >
                                 {mode === "login" ? "Hier registrieren" : "Hier anmelden"}
-                            </Link>
+                            </button>
                         </div>
 
                         {mode === "login" && (
@@ -146,11 +144,6 @@ export function AuthForm({mode}) {
                             </div>
                         )}
                     </form>
-                </div>
-
-                <div className="auth-footer">
-                    <p>
-                        Indem Sie fortfahren, stimmen Sie unseren Servicebedingungen und Datenschutzrichtlinien zu.</p>
                 </div>
             </div>
         </div>
