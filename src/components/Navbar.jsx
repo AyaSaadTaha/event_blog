@@ -32,6 +32,24 @@ const Navbar = () => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'kategorien-menu',
+                }}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                PaperProps={{
+                    style: {
+                        minWidth: '200px',
+                        maxWidth: '250px',
+                        marginTop: '8px',
+                    }
+                }}
             >
                 {kategorien.map((kat, idx) => (
                     <MenuItem

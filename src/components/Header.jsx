@@ -104,6 +104,24 @@ export default function Header() {
                                 open={open}
                                 onClose={handleClose}
                                 keepMounted
+                                MenuListProps={{
+                                    'aria-labelledby': 'kategorien-menu',
+                                }}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                PaperProps={{
+                                    style: {
+                                        minWidth: '200px',
+                                        maxWidth: '250px',
+                                        marginTop: '8px',
+                                    }
+                                }}
                             >
                                 <MenuItem component={Link} to="/profile" onClick={handleClose}>
                                     Profile
