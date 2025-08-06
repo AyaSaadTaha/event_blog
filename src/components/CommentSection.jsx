@@ -90,8 +90,8 @@ export default function CommentSection({ postId, comments }) {
                     </div>
                 ) : (
                     <div className="comments-empty">
-                        <p>No comments yet</p>
-                        <p>Be the first to share your thoughts!</p>
+                        <p>Noch keine Kommentare</p>
+                        <p>Sei der Erste, der deine Meinung teilt!</p>
                     </div>
                 )}
             </div>

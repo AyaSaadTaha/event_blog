@@ -119,7 +119,7 @@ export default function Profile() {
                                     createdAt: post.createdAt,
                                     author: post.author,
                                     authorName: post.authorName,
-                                    image: post.image
+                                    imageBase64: post.imageBase64
                                 }}
                             />
                         ))}
