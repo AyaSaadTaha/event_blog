@@ -79,7 +79,7 @@
 .events-page-title {
     font-size: 32px;
     font-weight: 600;
-    margin-bottom: 32px;
+    margin-bottom: 15px!important;
     text-align: left;
     color: #222;
 }
@@ -187,6 +187,39 @@ div.event-content {
     flex-shrink: 0;
     width: 280px;
     min-width: 280px;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 10px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 39%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 16px;
+}
+
+.event-search {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.event-search:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
 }
 
 button.favorite-icon {

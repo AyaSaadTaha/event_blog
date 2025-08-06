@@ -3,7 +3,7 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase/config";
 import PostCard from "../components/PostCard";
 import '../components/PostCard.css'
-import { FaSortAmountDown} from "react-icons/fa";
+import {FaSearch, FaSortAmountDown} from "react-icons/fa";
 import { FaSortAmountUp } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 import {Pagination} from "@mui/material";
@@ -73,18 +73,6 @@ export default function Home() {
             <h1 className="events-page-title">Kommende Veranstaltungen</h1>
                 <div className="events-controls">
                     {/* field search */}
-                    <div className="search-wrapper">
-                       {/* <FaSearch className="search-icon" />*/}
-                        <input
-                            type="text"
-                            className="event-search"
-                            placeholder="Suchen..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                </div>
-
                 <div>
                     <div
                         className={`icon-button ${sortOrder === "asc" ? "active" : ""}`}
@@ -102,6 +90,18 @@ export default function Home() {
                     </div>
                 </div>
 
+            </div>
+
+            </div>
+            <div className="search-wrapper">
+                <FaSearch className="search-icon" />
+                <input
+                    type="text"
+                    className="event-search"
+                    placeholder="Suchen..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
             <div className="events-list">
