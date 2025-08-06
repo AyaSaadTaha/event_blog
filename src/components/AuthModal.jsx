@@ -5,7 +5,7 @@ import { FaTimes } from "react-icons/fa";
 export function AuthModal({ mode, open, onClose, onSwitchMode }) {
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
-                scroll="paper"
+                scroll="body"
                 sx={{
                     "& .MuiDialog-paper": {
                         overflow: "hidden",
