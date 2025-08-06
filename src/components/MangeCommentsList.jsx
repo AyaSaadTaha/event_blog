@@ -141,7 +141,7 @@ const MangeCommentsList = () => {
     if (loading) {
         return (
             <div className="comments-container">
-                <div className="loading-spinner">Loading comments...</div>
+                <div className="loading-spinner">Wird geladenKommentare ...</div>
             </div>
         );
     }
@@ -149,7 +149,7 @@ const MangeCommentsList = () => {
     if (!post) {
         return (
             <div className="comments-container">
-                <div className="error-message">Post not found</div>
+                <div className="error-message">Keine Beiträge</div>
             </div>
         );
     }
@@ -158,15 +158,15 @@ const MangeCommentsList = () => {
         <div className="comments-container">
             <div className="comments-header">
                 <button onClick={() => navigate(-1)} className="back-button">
-                    ← Back to Post
+                    ← Zurück zum Beitrag
                 </button>
-                <h1>Comments for: {post.title}</h1>
+                <h1>Kommentare zu: {post.title}</h1>
             </div>
 
             <div className="comments-content">
                 {/* Neuer Kommentar Bereich */}
                 <div className="add-comment-section">
-                    <h3>Add New Comment</h3>
+                    <h3>Neuen Kommentar hinzufügen</h3>
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
@@ -184,10 +184,11 @@ const MangeCommentsList = () => {
 
                 {/* Kommentarliste */}
                 <div className="comments-list">
-                    <h3>{comments.length} {comments.length === 1 ? 'Comment' : 'Comments'}</h3>
+                    <h3>{comments.length} {comments.length === 1 ? 'Kommentare' : 'Kommentare'}</h3>
 
                     {comments.length === 0 ? (
-                        <div className="no-comments">No comments yet. Be the first to comment!</div>
+                        <div className="no-comments">Noch keine Kommentare. Sei der Erste, der einen Kommentar schreibt!
+                        </div>
                     ) : (
                         comments.map(comment => (
                             <div key={comment.id} className="comment-card">
@@ -207,7 +208,7 @@ const MangeCommentsList = () => {
                                                         onClick={() => handleUpdateComment(comment.id)}
                                                         className="action-btn save-btn"
                                                     >
-                                                        Save
+                                                        Speichern
                                                     </button>
                                                     <button
                                                         onClick={() => {
@@ -216,7 +217,7 @@ const MangeCommentsList = () => {
                                                         }}
                                                         className="action-btn cancel-btn"
                                                     >
-                                                        Cancel
+                                                        Abbrechen
                                                     </button>
                                                 </>
                                             ) : (
@@ -228,13 +229,13 @@ const MangeCommentsList = () => {
                                                         }}
                                                         className="action-btn edit-btn"
                                                     >
-                                                        Edit
+                                                        Bearbeiten
                                                     </button>
                                                     <button
                                                         onClick={() => handleDeleteComment(comment.id)}
                                                         className="action-btn delete-btn"
                                                     >
-                                                        Delete
+                                                        Löschen
                                                     </button>
                                                 </>
                                             )}
