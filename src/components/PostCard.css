@@ -134,6 +134,7 @@ div.event-info {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+    gap: 16px;
 }
 
 img.event-image {
@@ -141,6 +142,7 @@ img.event-image {
     max-height: 260px;
     object-fit: cover;
     border-radius: 8px;
+    height: 200px;
 }
 
 div.event-content {
@@ -149,6 +151,8 @@ div.event-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    flex: 1;
+    min-width: 0;
 }
 
 .event-title a {
@@ -164,6 +168,7 @@ div.event-content {
     margin-top: 4px;
     color: #666;
     font-size: 14px;
+    word-wrap: break-word;
 }
 
 .event-footer {
@@ -179,6 +184,9 @@ div.event-content {
 
 .event-image-wrapper {
     position: relative;
+    flex-shrink: 0;
+    width: 280px;
+    min-width: 280px;
 }
 
 button.favorite-icon {
@@ -234,3 +242,30 @@ button.favorite-icon:hover {
     color: #83b2e4!important;
 }
 
+.postcard-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* media queries */
+@media (max-width: 768px) {
+    .event-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .event-info {
+        flex-direction: column;
+    }
+
+    .event-image-wrapper {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .event-date {
+        align-self: flex-start;
+    }
+}

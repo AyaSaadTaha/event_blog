@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {doc, getDoc, collection, query, where, getDocs, onSnapshot} from "firebase/firestore";
 import { db } from "../firebase/config";
 import CommentSection from "../components/CommentSection";
 import {Box, Chip} from "@mui/material";
 import {getKategorieNameById} from "../components/kategorienEnum.js";
-import {FaRegHeart} from "react-icons/fa";
+import {FaHeart, FaRegHeart} from "react-icons/fa";
 import '../components/CommentSection.css'
+import FavoriteInfo from "../components/FavoriteInfo.jsx";
 
 export default function PostDetails() {
     const { id } = useParams();
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [favoriteCount, setFavoriteCount] = useState(0);
 
     useEffect(() => {
         const fetchPostAndComments = async () => {
@@ -40,6 +42,18 @@ export default function PostDetails() {
         fetchPostAndComments();
     }, [id]);
 
+    useEffect(() => {
+        if (!post?.id) return; //wait until the post loads
+
+        const q = query(collection(db, "posts", post.id, "favorites"));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            setFavoriteCount(snapshot.size);
+        });
+
+        return () => unsubscribe();
+    }, [post?.id]);
+
+
     if (loading) return <div className="loading">Loading...</div>;
     if (!post) return <div className="error">Post not found</div>;
 
@@ -56,6 +70,7 @@ export default function PostDetails() {
                         <h3 className="post-title">{post.title}</h3>
                         <div className="post-date">
                             Veröffentlicht am: {new Date(post.createdAt?.toDate()).toLocaleDateString('de-DE')}
+                            <span> | Autor: {post.authorName || "Unknown author"}</span>
                         </div>
                     </header>
 
@@ -70,8 +85,9 @@ export default function PostDetails() {
                     {/* Like button */}
                     <div className="comment-actions">
                         <button className="like-btn">
-                            <FaRegHeart />
-                            <span>0</span>
+                            <FavoriteInfo
+                                favoriteCount={favoriteCount}
+                            />
                         </button>
                     </div>
                 </div>

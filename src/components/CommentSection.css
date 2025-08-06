@@ -36,7 +36,7 @@
 .post-body-container {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .post-content {
