@@ -75,8 +75,8 @@ export default function PostDetails() {
                     </header>
 
                     <div className="post-body-container">
-                    <img src={post.image || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070"} alt={post.title} className="post-image" />
-                    <div className="post-body">
+                        <img src={post.imageBase64 || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070"} alt={post.title} className="post-image" />
+                         <div className="post-body">
                         {post.content.split('\n').map((paragraph, i) => (
                             <p key={i}>{paragraph}</p>
                         ))}
