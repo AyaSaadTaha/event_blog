@@ -1,9 +1,10 @@
 .header {
-    display: flex;
-    justify-content: space-between;
+    display: flex!important;
+    justify-content: space-between!important;
     align-items: center;
     padding: 1rem;
     border-bottom: 1px solid #ccc;
+    width:100%;
 }
 
 .auth {
@@ -16,7 +17,7 @@
     color: #007bff;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     transition: color 0.3s;
 }
 
@@ -72,7 +73,19 @@
 /*Header UI*/
 
 .header-appbar {
-    background-color: transparent !important;
+    position: fixed!important;
+    top: 0!important;
+    left: 0!important;
+    right: 0!important;
+    z-index: 1000!important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #ccc;
+    background-color: white !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width:100%!important;
 }
 
 .header-toolbar {
@@ -80,6 +93,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
+    width:100%!important;
 }
 
 .header-logo {
