@@ -282,6 +282,14 @@ button.favorite-icon:hover {
     gap: 6px;
 }
 
+.event-date .gradient-line {
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(to right, #9ca3af, #6c757d);
+    border-radius: 9999px;
+    margin: 10px 0 3px 0;
+}
+
 /* media queries */
 @media (max-width: 768px) {
     .event-container {

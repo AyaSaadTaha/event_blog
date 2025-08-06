@@ -76,6 +76,7 @@ export default function PostCard({ post }) {
                 <span className="event-month">
                     {new Date(post.createdAt?.toDate()).toLocaleString('de-DE', { month: 'short' }).toUpperCase()}
                 </span>
+                <div className="gradient-line"></div>
                 <span className="event-day">
                      {new Date(post.createdAt?.toDate()).getDate()}
                 </span>
