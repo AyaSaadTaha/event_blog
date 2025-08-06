@@ -1,119 +1,207 @@
+/* Modern Profile Design with Animations */
 .profile-container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 2rem auto;
-    padding: 0 20px;
+    padding: 0 1.5rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Section */
 .profile-header {
-    text-align: center;
-    margin-bottom: 2rem;
+    align-items: center;
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
     position: relative;
+    overflow: hidden;
+}
+
+.profile-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30 30L70 70M70 30L30 70" stroke="rgba(67, 97, 238, 0.03)" stroke-width="1"/></svg>');
 }
 
 .profile-avatar {
     width: 120px;
     height: 120px;
-    margin: 0 auto 1rem;
+    min-width: 120px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #4361ee;
-    border: 3px solid #4361ee;
-}
-
-.logout-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #f72585;
     color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background 0.3s;
+    font-size: 3rem;
+    box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3);
+    z-index: 1;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
-.logout-btn:hover {
-    background: #d1144a;
+.profile-avatar:hover {
+    transform: rotate(10deg) scale(1.05);
 }
 
-.profile-details {
+.profile-title {
+    z-index: 1;
+}
+
+.profile-title h1 {
+    font-size: 2.2rem;
+    margin: 0 0 0.5rem;
+    color: #2b2d42;
+    font-weight: 700;
+}
+
+.profile-title p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+/* Details Grid */
+.details-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 3rem;
 }
 
 .detail-card {
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1.75rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 4px solid transparent;
+}
+
+.detail-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(67, 97, 238, 0.1);
+    border-left-color: #4361ee;
+}
+
+.detail-card:nth-child(1):hover { border-left-color: #4361ee; }
+.detail-card:nth-child(2):hover { border-left-color: #4cc9f0; }
+.detail-card:nth-child(3):hover { border-left-color: #f72585; }
+.detail-card:nth-child(4):hover { border-left-color: #7209b7; }
+
+.detail-header {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .detail-icon {
-    font-size: 1.5rem;
-    color: #4361ee;
-}
-
-.detail-card h3 {
-    margin: 0 0 5px 0;
-    color: #333;
-}
-
-.detail-card p {
-    margin: 0;
-    color: #666;
-}
-
-.favorites-section {
-    margin-top: 2rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    flex-direction: column;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
 }
 
-.favorites-section h2 {
-    border-bottom: 2px solid #4361ee;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+.detail-card:nth-child(2) .detail-icon {
+    background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+}
+
+.detail-card:nth-child(3) .detail-icon {
+    background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+}
+
+.detail-card:nth-child(4) .detail-icon {
+    background: linear-gradient(135deg, #7209b7 0%, #560bad 100%);
+}
+
+.detail-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6c757d;
+    margin: 0;
+}
+
+.detail-content {
+    font-size: 1.25rem;
+    color: #2b2d42;
+    font-weight: 600;
+    margin: 0;
+    padding-left: 0.5rem;
+}
+
+/* Favorites Section */
+.favorites-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    color: #2b2d42;
+    margin-bottom: 2rem;
+}
+
+.section-title::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 30px;
+    border-radius: 4px;
+    background: linear-gradient(to bottom, #4361ee, #3a0ca3);
 }
 
 .favorites-grid {
-   display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
-.loading {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-}
-
-.no-favorites {
-    text-align: center;
-    padding: 2rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    color: #666;
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
-    .profile-details {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .details-grid {
         grid-template-columns: 1fr;
     }
 
-    .logout-btn {
-        position: static;
-        margin: 1rem auto;
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
     }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.loading-state {
+    animation: pulse 1.5s ease-in-out infinite;
 }

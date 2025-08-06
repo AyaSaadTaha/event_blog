@@ -1,8 +1,8 @@
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase/config';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { FaUser, FaEnvelope, FaPhone, FaUserShield, FaCalendarAlt, FaSignOutAlt } from 'react-icons/fa';
+import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { FaUser, FaEnvelope, FaPhone, FaUserShield, FaCalendarAlt } from 'react-icons/fa';
 import PostCard from '../components/PostCard';
 import './profile.css';
 
@@ -13,44 +13,46 @@ export default function Profile() {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
+        if (!currentUser) return;
+
+        // 1. Get user's document from Firestore
         const fetchUserData = async () => {
-            if (currentUser) {
-                try {
-                    // 1. Get user's document from Firestore
-                    const userDocRef = doc(db, "users", currentUser.uid);
-                    const userDocSnap = await getDoc(userDocRef);
+            const userDocRef = doc(db, "users", currentUser.uid);
+            const userDocSnap = await getDoc(userDocRef);
 
-                    if (userDocSnap.exists()) {
-                        setUserData(userDocSnap.data());
-                    } else {
-                        console.log("No user data found");
-                    }
-
-                    // 2. Get user's favorite posts
-                    const favoritesRef = collection(db, "users", currentUser.uid, "userFavorites");
-                    const favoritesSnapshot = await getDocs(favoritesRef);
-
-                    const postsPromises = favoritesSnapshot.docs.map(async (favDoc) => {
-                        const postRef = doc(db, "posts", favDoc.id);
-                        const postSnap = await getDoc(postRef);
-
-                        return {
-                            id: favDoc.id,
-                            ...postSnap.data(),
-                            favoritedAt: favDoc.data().favoritedAt
-                        };
-                    });
-
-                    const posts = await Promise.all(postsPromises);
-                    setFavoritePosts(posts);
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                } finally {
-                    setLoading(false);
-                }
+            if (userDocSnap.exists()) {
+                setUserData(userDocSnap.data());
+            } else {
+                console.log("No user data found");
             }
         };
         fetchUserData();
+
+        // 2. Set up real-time listener for favorite posts
+        const favoritesRef = collection(db, "users", currentUser.uid, "userFavorites");
+        const unsubscribe = onSnapshot(favoritesRef, async (favoritesSnapshot) => {
+            try {
+                const postsPromises = favoritesSnapshot.docs.map(async (favDoc) => {
+                    const postRef = doc(db, "posts", favDoc.id);
+                    const postSnap = await getDoc(postRef);
+
+                    return {
+                        id: favDoc.id,
+                        ...postSnap.data(),
+                        favoritedAt: favDoc.data().favoritedAt
+                    };
+                });
+
+                const posts = await Promise.all(postsPromises);
+                setFavoritePosts(posts);
+            } catch (error) {
+                console.error("Error fetching favorite posts:", error);
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        return () => unsubscribe();
     }, [currentUser]);
 
     return (
@@ -116,7 +118,8 @@ export default function Profile() {
                                     kategorienId: post.kategorienId || "",
                                     createdAt: post.createdAt,
                                     author: post.author,
-                                    authorName: post.authorName
+                                    authorName: post.authorName,
+                                    image: post.image
                                 }}
                             />
                         ))}
