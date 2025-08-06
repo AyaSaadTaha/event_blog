@@ -68,7 +68,7 @@ export default function Profile() {
                 <div className="detail-card">
                     <FaEnvelope className="detail-icon" />
                     <div>
-                        <h3>Email</h3>
+                        <h3>E-Mail</h3>
                         <p>{currentUser?.email}</p>
                     </div>
                 </div>
@@ -76,7 +76,7 @@ export default function Profile() {
                 <div className="detail-card">
                     <FaPhone className="detail-icon" />
                     <div>
-                        <h3>Phone</h3>
+                        <h3>Telefon</h3>
                         <p>{userData?.phone || 'Not provided'}</p>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function Profile() {
                 <div className="detail-card">
                     <FaUserShield className="detail-icon" />
                     <div>
-                        <h3>Role</h3>
+                        <h3>Rolle</h3>
                         <p>{userData?.role || 'user'}</p>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ export default function Profile() {
                 <div className="detail-card">
                     <FaCalendarAlt className="detail-icon" />
                     <div>
-                        <h3>Member Since</h3>
+                        <h3>Mitglied seit</h3>
                         <p>
                             {currentUser?.metadata?.creationTime
                                 ? new Date(currentUser.metadata.creationTime).toLocaleDateString()
@@ -103,9 +103,9 @@ export default function Profile() {
             </div>
 
             <div className="favorites-section">
-                <h2>Your Favorite Posts ({favoritePosts.length})</h2>
+                <h2>Deine Lieblingsbeiträge ({favoritePosts.length})</h2>
                 {loading ? (
-                    <div className="loading">Loading favorites...</div>
+                    <div className="loading">Loading Lieblingsbeiträge...</div>
                 ) : favoritePosts.length > 0 ? (
                     <div className="favorites-grid">
                         {favoritePosts.map(post => (
@@ -125,7 +125,7 @@ export default function Profile() {
                         ))}
                     </div>
                 ) : (
-                    <p className="no-favorites">You haven't favorited any posts yet.</p>
+                    <p className="no-favorites">Du hast noch keine Beiträge als Favorit markiert.</p>
                 )}
             </div>
         </div>
