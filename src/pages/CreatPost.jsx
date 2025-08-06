@@ -16,14 +16,15 @@ export default function CreatePost() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState(null);
     const [form, setForm] = useState({
         title: '',
         content: '',
-        KategorienID: ''
+        KategorienID: '',
+        image: null,
+        imagePreview: null
     });
 
-    // Fetch data from Firebase
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -31,7 +32,6 @@ export default function CreatePost() {
                 if (!currentUser?.uid) {
                     throw new Error("User not authenticated");
                 }
-                // 1. Get user
                 const userDocRef = doc(db, "users", currentUser.uid);
                 const userDocSnap = await getDoc(userDocRef);
 
@@ -39,16 +39,14 @@ export default function CreatePost() {
                     throw new Error("User document not found");
                 }
                 setUser(userDocSnap.data())
-                console.log(userDocSnap.data().name)
             } catch (error) {
-                setError(error);
+                setError(error.message);
             }
         }
-            if (currentUser?.uid) {
-                fetchData();
-            }
-        }, [currentUser]);
-
+        if (currentUser?.uid) {
+            fetchData();
+        }
+    }, [currentUser]);
 
     const handleKategorienOpen = (event) => setAnchorEl(event.currentTarget);
     const handleKategorienClose = () => setAnchorEl(null);
@@ -57,6 +55,92 @@ export default function CreatePost() {
         setSelectedKategorie(kat.name);
         handleKategorienClose();
     };
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.match('image.*')) {
+            setError("Please select an image file");
+            return;
+        }
+
+        // Check file size before compression
+        if (file.size > 500 * 1024) {
+            setError("Image must be smaller than 500KB");
+            return;
+        }
+
+        try {
+            // Die aggressive Komprimierung wird hier aufgerufen
+            const compressedImage = await compressImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setForm({
+                    ...form,
+                    image: reader.result,
+                    imagePreview: reader.result
+                });
+                setError(""); // Clear any previous error
+            };
+            reader.readAsDataURL(compressedImage);
+        } catch (err) {
+            setError("Failed to process image");
+            console.error(err);
+        }
+    };
+
+    // Die angepasste Funktion zur aggressiven Bildkomprimierung
+    const compressImage = async (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Setze kleinere maximale Abmessungen für stärkere Komprimierung
+                    const MAX_WIDTH = 400;
+                    const MAX_HEIGHT = 400;
+
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Reduziere die Qualität für eine kleinere Dateigröße
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            }));
+                        } else {
+                            reject(new Error("Failed to compress image."));
+                        }
+                    }, 'image/jpeg', 0.4); // <-- Starke Qualitätsreduzierung
+                };
+            };
+        });
+    };
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -74,17 +158,27 @@ export default function CreatePost() {
         }
 
         try {
-            await addDoc(collection(db, "posts"), {
+            const postData = {
                 title: form.title,
                 content: form.content,
                 kategorienId: form.KategorienID,
                 createdAt: new Date(),
                 uid: currentUser?.uid,
                 author: currentUser?.email,
-                authorName: user.name,
-            });
+                authorName: user?.name,
+                imageBase64: form.image || null
+            };
+
+            await addDoc(collection(db, "posts"), postData);
+
             setSuccess("Post created successfully!");
-            setForm({ title: "", content: "", KategorienID: "" });
+            setForm({
+                title: "",
+                content: "",
+                KategorienID: "",
+                image: null,
+                imagePreview: null
+            });
             setSelectedKategorie("");
         } catch (err) {
             console.error("Error creating post:", err);
@@ -93,7 +187,6 @@ export default function CreatePost() {
             setIsLoading(false);
         }
     };
-
 
     return (
         <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
@@ -138,6 +231,31 @@ export default function CreatePost() {
                     />
 
                     <Box>
+                        <input
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="raised-button-file"
+                            type="file"
+                            onChange={handleImageChange}
+                        />
+                        <label htmlFor="raised-button-file">
+                            <Button variant="outlined" component="span" sx={{ mb: 2 }}>
+                                Upload Image
+                            </Button>
+                        </label>
+                        {form.imagePreview && (
+                            <Box sx={{ mt: 2 }}>
+                                <Typography variant="subtitle2">Image Preview:</Typography>
+                                <img
+                                    src={form.imagePreview}
+                                    alt="Preview"
+                                    style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '8px' }}
+                                />
+                            </Box>
+                        )}
+                    </Box>
+
+                    <Box>
                         <Button
                             variant="outlined"
                             onClick={handleKategorienOpen}
@@ -178,5 +296,4 @@ export default function CreatePost() {
             </Paper>
         </Box>
     );
-
-    };
+};

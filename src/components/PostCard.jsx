@@ -84,7 +84,7 @@ export default function PostCard({ post }) {
             <div className="event-info">
                 <div className="event-image-wrapper">
                     <img
-                        src={post.image || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070"}
+                        src={post.imageBase64 || "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070"}
                         alt="Event"
                         className="event-image"
                     />
